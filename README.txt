@@ -1,5 +1,7 @@
 graphdigitizer is a MATLAB function for converting graphs in .jpg, .png and .gif picture formats into numerical format. For instructions in its use, run the function as graphdigitizer() and press the 'help' button, or read the 'help.txt' file in the 'help' folder. This program is currently functional but is still under development and will be improved in the future.
 
+Requirements: Tested on Matlab R2017a, should work on Matlab R2014b or newer. (This program uses dot notation to access graphics handles, while older versions of Matlab use set() and get() functions.)
+
 TO DO:
 This is a list of features that should be made available in upcoming
 versions of this program. Also includes a list of known bugs.
