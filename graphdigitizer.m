@@ -315,29 +315,6 @@ end
 function button_test_Callback(hObject, eventdata, handles)
 disp(handles)
 
-%TO DO:
-%This is a list of features that should be made available in upcoming
-%versions of this program. Also includes a list of known bugs.
-%
-% PRIORITY I
-% - - -
-%
-% PRIORITY II
-% - delete several data points by pressing down mouse button 1 and moving the mouse over them 
-% - 'are you sure?' -question before refreshing the graph and overwriting all user-made changes
-% - forbid wasd key activity when an edit field is active
-% - create algorithm to reduce static in the graph
-%
-%PRIORITY III
-% - set index value edit field maximum values depending on size of picture and scale mode
-% - improve graph-finding algorithm
-% - improve the behavior of the parameters
-% - indicate which mode is active
-% - functionality to remove all data points withing a specified distance of the edges of the picture
-% - check the validity of output file name
-% - option to specify save file data format and headers
-% - expand the help GUI
-
 %Arguments used in callback functions:
 % hObject    handle to active object (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
