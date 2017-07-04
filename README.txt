@@ -5,14 +5,14 @@ This is a list of features that should be made available in upcoming
 versions of this program. Also includes a list of known bugs.
 
  PRIORITY I
- - - -
+ - switch wasd key activity to arrow keys or otherwise prevent unwanted writing in edit fields while zooming
 
  PRIORITY II
  - delete several data points by pressing down mouse button 1 and moving the mouse over them 
  - 'are you sure?' -question before refreshing the graph and overwriting all user-made changes
  - forbid wasd key activity when an edit field is active
  - create algorithm to reduce static in the graph
- - improve graph-finding algorithm
+ - improve graph-finding algorithm (done, just needs testing and refactoring)
 
 PRIORITY III
  - set index value edit field maximum values depending on size of picture and scale mode
