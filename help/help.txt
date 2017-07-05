@@ -9,9 +9,13 @@ the filename in the text field. Supported formats are .jpg, .png and .gif.
 
 Image navigation:
 You can zoom the image by using the 'Zoom' slider or the mouse wheel. 
-Scroll vertically or horizontally by using the respective sliders or WASD 
-keys. The arrow keys always control the last slider you clicked (MATLAB 
-default functionality).
+Scroll vertically or horizontally by using the respective sliders, arrow 
+keys, or WASD keys. Note that if you have an edit field active (i.e. you 
+have clicked it and see a flashing pointer), pressing any of the WASD keys 
+will write text in that edit field, and if you have a slider active (i.e. 
+you have clicked the slider and nothing else after that), pressing the 
+arrow keys will move that slider. You can deactivate an edit field or a 
+slider by simply cliking somewhere else.
 
 
 

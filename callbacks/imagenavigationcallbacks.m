@@ -88,6 +88,14 @@ switch key
         y = y - step;
     case 'd'
         x = x + step;
+    case 'uparrow'
+        y = y + step;
+    case 'leftarrow'
+        x = x - step;
+    case 'downarrow'
+        y = y - step;
+    case 'rightarrow'
+        x = x + step;
     otherwise
         return
 end
