@@ -27,10 +27,12 @@ y = graphIndices;
 function [graphIndices, smallestDifferences] = findIndices()
 
 %Calculate color differences between graph and pixels
+colors = double(I);
 differences = zeros(ySize, xSize);
+
 for i = 1:ySize
     for j = 1:xSize
-        color = double([I(i, j, 1), I(i, j, 2), I(i, j, 3)]);      
+        color = [colors(i, j, 1), colors(i, j, 2), colors(i, j, 3)];
         difference = norm(color - graphColor);
         differences(i, j) = difference;
     end
@@ -52,21 +54,22 @@ end
 
 end
 
-
 function [graphIndices, smallestDifferences] = indicesFromDifferences(startI, differences, colorParam)
 
 ySize = size(differences, 1);
 xSize = size(differences, 2);
+maxDiff = sqrt(3);
 
 graphIndices = zeros(1, xSize);
 smallestDifferences = graphIndices;
 
 scores = zeros(ySize, xSize);
 
+%Find graph using a rough algorithm
 for j = 1:xSize
 
     for i = 1:ySize
-        colorDiff = 1000 * differences(i, j) / 255;
+        colorDiff = 100 * differences(i, j) / maxDiff;
         
         if j == 1
             newI = startI;
@@ -76,7 +79,7 @@ for j = 1:xSize
             newI = 2 * graphIndices(j - 1) - graphIndices(j - 2);
         end
    
-        shapeDiff = 1000 * abs(i - newI) / ySize;
+        shapeDiff = 100 * abs(i - newI) / ySize;
         scores(i, j) = colorParam * colorDiff + (1-colorParam) * shapeDiff;
 
     end
@@ -88,5 +91,48 @@ for j = 1:xSize
     smallestDifferences(j) = column(bestI);
 
 end
+
+%Find the middle of a thick line using a finer algorithm
+stopcondition = @(i, j) (differences(i, j) > maxDiff / 5);
+
+for j = 1:xSize
+    i0 = graphIndices(j);
+
+    list = [i0 differences(i0, j)];
+    
+    for i = i0 + 1 : i0 + ySize / 20
+        if i < 1 || i > ySize
+            continue
+        end
+        
+        if stopcondition(i, j)
+            break
+        end
+        
+        list = cat(1, list, [i, differences(i, j)]);
+    end
+    
+    for i = i0 - 1 : -1 : i0 - ySize / 20
+        if i < 1 || i > ySize
+            continue
+        end
+                
+        if stopcondition(i, j)
+            break
+        end
+        
+        list = cat(1, list, [i, differences(i, j)]);
+    end
+    
+    %Weighted average of pixels in list:
+    total = 0;
+    colorsum = 0;
+    for i = 1:size(list, 1)
+        total = total + list(i, 1) * (maxDiff - list(i, 2));
+        colorsum = colorsum + (maxDiff - list(i, 2));
+    end
+    
+    graphIndices(j) = round(total / colorsum);    
+end    
 
 end
