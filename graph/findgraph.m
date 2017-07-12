@@ -42,11 +42,11 @@ graphIndices = zeros(1, xSize);
 smallestDifferences = 999 * ones(1, xSize);
 
 %Find i-indices of graph points using differences
-[indicesEnd, diffEnd] = indicesFromDifferences(startPointI, colors, differences(:, startPointJ : xSize), colorParam);
+[indicesEnd, diffEnd] = indicesFromDifferences(startPointI, differences(:, startPointJ : xSize), colorParam);
 graphIndices(startPointJ : xSize) = indicesEnd;
 smallestDifferences(startPointJ : xSize) = diffEnd;
 
-[indicesStart, diffStart] = indicesFromDifferences(startPointI, colors, differences(:, startPointJ: -1 : 1), colorParam);
+[indicesStart, diffStart] = indicesFromDifferences(startPointI, differences(:, startPointJ: -1 : 1), colorParam);
 graphIndices(startPointJ : -1 : 1) = indicesStart;
 smallestDifferences(startPointJ : -1 : 1) = diffStart;
 
@@ -54,20 +54,22 @@ end
 
 end
 
-function [graphIndices, smallestDifferences] = indicesFromDifferences(startI, colors, differences, colorParam)
+function [graphIndices, smallestDifferences] = indicesFromDifferences(startI, differences, colorParam)
 
 ySize = size(differences, 1);
 xSize = size(differences, 2);
+maxDiff = sqrt(3);
 
 graphIndices = zeros(1, xSize);
 smallestDifferences = graphIndices;
 
 scores = zeros(ySize, xSize);
 
+%Find graph using a rough algorithm
 for j = 1:xSize
 
     for i = 1:ySize
-        colorDiff = 1000 * differences(i, j) / sqrt(3);
+        colorDiff = 100 * differences(i, j) / maxDiff;
         
         if j == 1
             newI = startI;
@@ -77,7 +79,7 @@ for j = 1:xSize
             newI = 2 * graphIndices(j - 1) - graphIndices(j - 2);
         end
    
-        shapeDiff = 1000 * abs(i - newI) / ySize;
+        shapeDiff = 100 * abs(i - newI) / ySize;
         scores(i, j) = colorParam * colorDiff + (1-colorParam) * shapeDiff;
 
     end
@@ -90,11 +92,8 @@ for j = 1:xSize
 
 end
 
-%stopcondition = @(i, j) (differences(i, j) > sqrt(3) / 2) || (sum(colors(i,j,1:3),3) < sqrt(3) / 10);
-%stopcondition = @(i, j) (differences(i, j) > sqrt(3) / 2) || (sum(colors(i,j,1:3),3) < 0.3);
-%stopcondition = @(i, j) (differences(i, j) > sqrt(3) / 2) || true;
-stopcondition = @(i, j) (differences(i, j) > sqrt(3) / 5);
-
+%Find the middle of a thick line using a finer algorithm
+stopcondition = @(i, j) (differences(i, j) > maxDiff / 5);
 
 for j = 1:xSize
     i0 = graphIndices(j);
@@ -125,19 +124,15 @@ for j = 1:xSize
         list = cat(1, list, [i, differences(i, j)]);
     end
     
+    %Weighted average of pixels in list:
     total = 0;
     colorsum = 0;
     for i = 1:size(list, 1)
-        total = total + list(i, 1) * (sqrt(3) - list(i, 2));
-        colorsum = colorsum + (sqrt(3) - list(i, 2));
+        total = total + list(i, 1) * (maxDiff - list(i, 2));
+        colorsum = colorsum + (maxDiff - list(i, 2));
     end
     
-    graphIndices(j) = round(total / colorsum);
-    
-     %if j < 5
-     %    j
-     %    list
-     %end
+    graphIndices(j) = round(total / colorsum);    
 end    
 
 end
