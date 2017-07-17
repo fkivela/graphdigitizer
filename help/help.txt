@@ -2,7 +2,7 @@ Instructions:
 
 Opening a file:
 
-Open an image file in the 'File' section by clicking 'Browse' or writing 
+Open an image file in the 'File' tab by clicking 'Browse' or writing 
 the filename in the text field. Supported formats are .jpg, .png and .gif.
 
 
@@ -21,8 +21,8 @@ slider by simply cliking somewhere else.
 
 Selecting a starting point:
 
-Next, select a starting point by clicking 'Select' in the 'Starting point' 
-section and then clicking on the graph you want to digitize. (Note that you 
+Next, select a starting point by clicking 'Select' in the 'Parameters' 
+tab and then clicking on the graph you want to digitize. (Note that you 
 can cancel this or any other selection action in the program by clicking on 
 the 'Select' button again.) Alternatively, you can input the coordinates by 
 hand by editing the 'X' and 'Y' fields.
@@ -38,7 +38,7 @@ relatively straight (i.e. its 2nd derivative is close to 0).
 
 Digitizing the graph:
 
-Upon clicking the 'Find graph' button int the 'Data' area, the algorithm 
+Upon clicking the 'Find graph' button, the algorithm 
 automatically finds and highlights the chosen graph on the original image. 
 On the right a new image will be displayed, which presents a plot of the 
 data points in the graph. The 'Find graph' button can also be used to 
@@ -87,7 +87,7 @@ color.
 
 Scale:
 
-The 'Scale' field is used to tell the program the values on the axes of the 
+The 'Scale' tab is used to tell the program the values on the axes of the 
 plot, since the program cannot detect them automatically. There are three 
 different ways to determine the axes, corresponding to the three radio 
 buttons in the 'Scale selection mode' panel.
@@ -117,10 +117,10 @@ button and repeat the process for the y-axis.
 Edit data points:
 
 The data points hightlighted in the left image can be edited by hand. 
-Activate an editing mode by clicking on the 'Delete data points', 
-'Overwrite data points' or 'Area deletion' buttons. An editing mode may be 
-cancelled by clicking on the corresponding button again, or switching to 
-another editing mode by clicking another button.
+Activate an editing mode by opening the 'Data' tab and clicking on the 
+'Delete data points', 'Overwrite data points' or 'Area deletion' buttons. 
+An editing mode may be cancelled by clicking on the corresponding button 
+again, or switching to another editing mode by clicking another button.
 
 - Delete Data Points:
 Click on any data point in this mode to delete it. Note that you must 
@@ -143,7 +143,7 @@ by the two clicks.
 Save data:
 
 Click on the 'Save to text file' button to save the data points to a text 
-file indicated in the 'File name' field in the 'Data' panel. If a file with 
+file indicated in the 'File name' field in the 'Data' tab. If a file with 
 that name already exists, the old data will be overridden. If the file 
 doesn't exist, it will be created. The data will be saved in the format
 1    2

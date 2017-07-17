@@ -11,7 +11,7 @@ function varargout = graphdigitizer(varargin)
 %
 % See also: DIGITIZE
 
-% Last Modified by GUIDE v2.5 26-Jun-2017 10:11:12
+% Last Modified by GUIDE v2.5 17-Jul-2017 09:55:07
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -39,10 +39,12 @@ folder = fileparts(which(mfilename));
 % Add that folder plus all subfolders to MATLAB path
 addpath(genpath(folder));
 
-names = [fieldnames(imagenavigationcallbacks); fieldnames(editfieldcallbacks); fieldnames(buttoncallbacks)];
-callbacks = cell2struct([struct2cell(imagenavigationcallbacks); struct2cell(editfieldcallbacks); struct2cell(buttoncallbacks)], names, 1);
+%Add callback function handles to handles.callbacks
+names = [fieldnames(imagenavigationcallbacks); fieldnames(editfieldcallbacks); fieldnames(buttoncallbacks); fieldnames(togglebuttoncallbacks)];
+callbacks = cell2struct([struct2cell(imagenavigationcallbacks); struct2cell(editfieldcallbacks); struct2cell(buttoncallbacks); struct2cell(togglebuttoncallbacks)], names, 1);
 handles.callbacks = callbacks;
 
+%Initialize data
 handles.img = [];
 handles.img_object = [];
 handles.x_size = 0;
@@ -79,9 +81,6 @@ switch 1
         set_scale_mode('axis points', hObject, eventdata, handles);        
 end
 handles = guidata(hObject);
-
-% Choose default command line output for graphdigitizer
-% handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
@@ -325,3 +324,18 @@ disp(handles)
 %#ok<*DEFNU> MATLAB doesn't find calls to GUIDE Callback functions even when they exist
 %#ok<*INUSL> Its easier to include arguments (hObject, eventdata, handles) in every 
 %function than to keep track of which functions need all of them and which only some
+
+
+function togglebutton_file_Callback(hObject, eventdata, handles)
+feval(handles.callbacks.filetab, hObject, eventdata, handles)
+
+function togglebutton_parameters_Callback(hObject, eventdata, handles)
+feval(handles.callbacks.parameterstab, hObject, eventdata, handles)
+
+
+function togglebutton_data_Callback(hObject, eventdata, handles)
+feval(handles.callbacks.datatab, hObject, eventdata, handles)
+
+
+function togglebutton_scale_Callback(hObject, eventdata, handles)
+feval(handles.callbacks.scaletab, hObject, eventdata, handles)
