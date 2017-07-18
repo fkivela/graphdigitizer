@@ -4,8 +4,10 @@ function callbacks = editfieldcallbacks
 
 callbacks = struct(...
       'fileName', @edit_filename_Callback,...
-      'editColor', @edit_color_Callback,...
-      'editDiff', @edit_diff_Callback,...
+      'colorDiff', @edit_color_diff_Callback,...
+      'distanceDiff', @edit_distance_diff_Callback,...
+      'graphfinding1', @edit_graphfinding1_Callback,...
+      'graphfinding2', @edit_graphfinding2_Callback,...
       'startX', @edit_start_x_Callback,...
       'startY', @edit_start_y_Callback,...
       'index1', @edit_index1_Callback,...
@@ -34,30 +36,61 @@ end
 
 %Parameters
 
-function edit_color_Callback(hObject, eventdata, handles)
-x = check_input(-inf, inf, 0, hObject);
+function edit_color_diff_Callback(hObject, eventdata, handles)
+x = check_input(0, 100, 0, hObject);
 
 if isempty(x)
     x = 0;
     hObject.String = 0;
 end
 
-handles.color_param = x;
+handles.color_diff_param = x;
 guidata(hObject, handles);
 end
 
-function edit_diff_Callback(hObject, eventdata, handles)
+function edit_distance_diff_Callback(hObject, eventdata, handles)
 
-x = check_input(-inf, inf, 0, hObject);
+x = check_input(0, 100, 0, hObject);
 
 if isempty(x)
     x = 0;
     hObject.String = 0;
 end
 
-handles.diff_param = x;
+handles.distance_diff_param = x;
 guidata(hObject, handles);
 end
+
+function edit_graphfinding1_Callback(hObject, eventdata, handles)
+
+x = check_input(0, 100, 0, hObject);
+
+if isempty(x)
+    x = 0;
+    hObject.String = 0;
+end
+
+handles.graphfinding_color_param = x;
+handles.edit_graphfinding2.String = 100 - x;
+guidata(hObject, handles);
+
+end
+
+function edit_graphfinding2_Callback(hObject, eventdata, handles)
+
+x = check_input(0, 100, 0, hObject);
+
+if isempty(x)
+    x = 0;
+    hObject.String = 0;
+end
+
+handles.graphfinding_color_param = 100 - x;
+handles.edit_graphfinding1.String = 100 - x;
+guidata(hObject, handles);
+
+end
+
 
 %Starting point
 

@@ -11,7 +11,7 @@ function varargout = graphdigitizer(varargin)
 %
 % See also: DIGITIZE
 
-% Last Modified by GUIDE v2.5 17-Jul-2017 09:55:07
+% Last Modified by GUIDE v2.5 17-Jul-2017 15:35:49
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -59,8 +59,10 @@ handles.clicks = 0;
 
 handles.start_x = [];
 handles.start_y = [];
-handles.color_param = str2double(handles.edit_color.String);
-handles.diff_param = str2double(handles.edit_diff.String);
+handles.color_diff_param = str2double(handles.edit_color_diff.String);
+handles.distance_diff_param = str2double(handles.edit_distance_diff.String);
+handles.graphfinding_color_param = str2double(handles.edit_graphfinding1.String);
+
 
 handles.zoom_level = handles.slider_z.Value;
 handles.zoom_x = handles.slider_x.Value;
@@ -171,18 +173,34 @@ feval(handles.callbacks.help, hObject, eventdata, handles)
 
 %Edit fields
 
-function edit_color_Callback(hObject, eventdata, handles)
-feval(handles.callbacks.editColor, hObject, eventdata, handles)
+function edit_color_diff_Callback(hObject, eventdata, handles)
+feval(handles.callbacks.colorDiff, hObject, eventdata, handles)
 
-function edit_color_CreateFcn(hObject, eventdata, handles)
+function edit_color_diff_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
-function edit_diff_Callback(hObject, eventdata, handles)
-feval(handles.callbacks.editDiff, hObject, eventdata, handles)
+function edit_distance_diff_Callback(hObject, eventdata, handles)
+feval(handles.callbacks.distanceDiff, hObject, eventdata, handles)
 
-function edit_diff_CreateFcn(hObject, eventdata, handles)
+function edit_distance_diff_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+function edit_graphfinding1_Callback(hObject, eventdata, handles)
+feval(handles.callbacks.graphfinding1, hObject, eventdata, handles)
+
+function edit_graphfinding1_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+function edit_graphfinding2_Callback(hObject, eventdata, handles)
+feval(handles.callbacks.graphfinding2, hObject, eventdata, handles)
+
+function edit_graphfinding2_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -320,7 +338,7 @@ disp(handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 %Suppressed warnings:
-%#ok<*ST2NM> str2num understans words such as 'pi'
+%#ok<*ST2NM> str2num understands words such as 'pi'
 %#ok<*DEFNU> MATLAB doesn't find calls to GUIDE Callback functions even when they exist
 %#ok<*INUSL> Its easier to include arguments (hObject, eventdata, handles) in every 
 %function than to keep track of which functions need all of them and which only some
@@ -339,3 +357,4 @@ feval(handles.callbacks.datatab, hObject, eventdata, handles)
 
 function togglebutton_scale_Callback(hObject, eventdata, handles)
 feval(handles.callbacks.scaletab, hObject, eventdata, handles)
+

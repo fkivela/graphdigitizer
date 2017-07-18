@@ -85,8 +85,10 @@ end
 
 function button_find_graph_Callback(hObject, eventdata, handles)
 
-color_param = handles.color_param;
-diff_param = handles.diff_param;
+parameters(1) = handles.color_diff_param;
+parameters(2) = handles.distance_diff_param;
+parameters(3) = handles.graphfinding_color_param;
+
 start_x = handles.start_x;
 start_y = handles.start_y;
 start = [start_x, start_y];
@@ -104,7 +106,7 @@ end
 
 handles = guidata(hObject);
 
-[x, y] = findgraph(img, start, diff_param, color_param);
+[x, y] = findgraph(img, start, parameters);
 handles.y_data = y;
 handles.plot_object = plot(handles.axes_plot, x, y);
 

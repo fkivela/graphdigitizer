@@ -7,13 +7,13 @@ This is a list of features that should be made available in upcoming
 versions of this program. Also includes a list of known bugs.
 
  PRIORITY I
-  - improve the behavior of the parameters (update parameters and their descriptions to match the new graph-finding algorithm)
+  - make sure new changes work with different screen sizes
 
  PRIORITY II
  - delete several data points by pressing down mouse button 1 and moving the mouse over them 
  - 'are you sure?' -question before refreshing the graph and overwriting all user-made changes
  - create algorithm to reduce static in the graph
- - improve graph-finding algorithm (done, just needs testing and refactoring)
+ - improve the functionality of distance parameter
 
 PRIORITY III
  - set index value edit field maximum values depending on size of picture and scale mode
@@ -22,3 +22,4 @@ PRIORITY III
  - functionality to remove all data points within a specified distance of the edges of the picture
  - option to specify save file data format and headers
  - expand the help GUI
+ - add parameters for total score tolerance and finding the middle of a thick line

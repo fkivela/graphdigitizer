@@ -2,155 +2,156 @@ Instructions:
 
 Opening a file:
 
-Open an image file in the 'File' tab by clicking 'Browse' or writing 
-the filename in the text field. Supported formats are .jpg, .png and .gif.
+Open an image file in the 'File' tab by clicking 'Browse' or writing the
+filename in the text field. Supported formats are .jpg, .png and .gif.
 
 
 
-Image navigation:
-You can zoom the image by using the 'Zoom' slider or the mouse wheel. 
-Scroll vertically or horizontally by using the respective sliders, arrow 
-keys, or WASD keys. Note that if you have an edit field active (i.e. you 
-have clicked it and see a flashing pointer), pressing any of the WASD keys 
-will write text in that edit field, and if you have a slider active (i.e. 
-you have clicked the slider and nothing else after that), pressing the 
-arrow keys will move that slider. You can deactivate an edit field or a 
-slider by simply cliking somewhere else.
+Image navigation: You can zoom the image by using the 'Zoom' slider or
+the mouse wheel. Scroll vertically or horizontally by using the
+respective sliders, arrow keys, or WASD keys. Note that if you have an
+edit field active (i.e. you have clicked it and see a flashing pointer),
+pressing any of the WASD keys will write text in that edit field, and if
+you have a slider active (i.e. you have clicked the slider and nothing
+else after that), pressing the arrow keys will move that slider. You can
+deactivate an edit field or a slider by simply cliking somewhere else.
 
 
 
 Selecting a starting point:
 
-Next, select a starting point by clicking 'Select' in the 'Parameters' 
-tab and then clicking on the graph you want to digitize. (Note that you 
-can cancel this or any other selection action in the program by clicking on 
-the 'Select' button again.) Alternatively, you can input the coordinates by 
-hand by editing the 'X' and 'Y' fields.
+After opening a file, select a starting point by clicking 'Select' in the
+'Parameters' tab and then clicking on the graph you want to digitize.
+(Note that you can cancel this or any other selection action in the
+program by clicking on the 'Select' button again.) Alternatively, you can
+input the coordinates by hand by editing the 'X' and 'Y' fields.
 
-The starting point is the point in the image where the algorithm starts 
-searching for the graph. This point doesn't need to be the actual 'starting 
-point' (i.e. the leftmost point) of the graph. For best results, the point 
-should be selected in an area where there are no other graphs, legends or 
-other unwanted objects near the point, and the graph around the point is 
-relatively straight (i.e. its 2nd derivative is close to 0).
+The starting point is the point in the image where the algorithm starts
+searching for the graph. This point doesn't need to be the actual
+'starting point' (i.e. the leftmost point) of the graph. For best
+results, the point should be selected in an area where there are no other
+graphs, legends or other unwanted objects near the point, and the graph
+around the point is relatively straight (i.e. its 2nd derivative is close
+to 0). However, this is not a very strict requirement, usually almost any
+point on the graph works quite well.
 
 
 
 Digitizing the graph:
 
-Upon clicking the 'Find graph' button, the algorithm 
-automatically finds and highlights the chosen graph on the original image. 
-On the right a new image will be displayed, which presents a plot of the 
-data points in the graph. The 'Find graph' button can also be used to 
-refresh the picture after adjusting the starting point or the parameters. 
-However, note that this will erase all user-made changes (see below) in the 
-data points.
+Upon clicking the 'Find graph' button, the algorithm automatically finds
+and highlights the chosen graph on the original image. On the right a new
+image will be displayed, which presents a plot of the data points in the
+graph. The 'Find graph' button can also be used to refresh the picture
+after adjusting the starting point or the parameters. However, note that
+this will erase all user-made changes (see below) in the data points.
 
 
 
 Parameters:
 
-The graph digitized by pressing 'Find graph' will probably include some 
-errors, and in some cases may not resemble the original graph at all. In 
-these cases adjusting the parameters can improve the results drastically. 
-The functionality of the parameters will be adjusted in the future, since 
-in their current state they don't work perfectly and finding their optimal 
-values may require refreshing the graph several times.
+The graph digitized by pressing 'Find graph' will probably include some
+errors caused by axes, legends and other objects in the picture. In these
+cases adjusting the parameters can improve the results drastically.
+However, finding the optimal values for the parameters may take several
+tries, so simply deleting unwanted data points is usually faster
 
-- Difference:
+- Color Difference Tolerance:
 
-The algorithm works by assigning each pixel a score based on the difference 
-between the color of the pixel and the color of the starting point, and the 
-distance between the pixel and a line drawn through already determined data 
-points in the columns adjacent to the pixel's column. The difference 
-parameter indicates the largest allowed score a data point is allowed to 
-have; data points with a score higher than this parameter are deleted.
+The program assigns every pixel in the original image a normalized (i.e.
+ranging from 0% to 100%) color difference value that is based on the
+difference in color between the pixel and the starting point. After
+finding the graph, the program will delete data points with a color
+difference value higher than this parameter.
 
-Setting this parameter low will reduce unwanted data points on the axes, 
-legends and edges of the picture, where no actual graph is plotted. The 
-score ranges approximately from 0 to 1000, but in practice changing the 
-parameter will show in results results only when it's value is very low, 
-and even setting it to 0 often produces good results.
+Setting this parameter to 100% will therefore keep all data points, 0%
+will delete all data points that are no an exact color match, and values
+between the extremes will delete the data points whose colors don't match
+the graph color very well.
 
-- Color:
 
-The color parameter indicates how strongly the aforementioned pixel score 
-is based on a pixel's color and how strongly on its position. With a value 
-of 0, the score will be based entirely on position (the detected graph will 
-usually be a straight line) and a value of 1 will generate a plot based 
-entirely on color. A value very close to 1 will usually work the best, but 
-it should be less than 1 in order to allow the difference parameter to 
-remove stray pixels that are far from the graph in position but close in 
-color.
+- Distance Difference Tolerance:
+
+This parameter works in the same way as Color Difference Tolerance, but
+instead of comparing pixel colors to the graph color, it compares the
+y-value of the data point to the y-values of the data points next to it.
+Setting this parameter to low will therefore remove single stray pixels
+far from the main graph. (This will be improved in the future to remove
+larger groups of unwanted pixels, since the current version doesn't do
+much.)
+
+
+ - Graph-Finding based on X % color, Y % position:
+
+This parameter is used to determine how strongly the graph-finding
+algorithm is based on pixel color compared to pixel position. Its usually
+best to set this to favor color when digitizing colorful graphs and to
+favor position when digitizing black-and-white graphs.
 
 
 
 Scale:
 
-The 'Scale' tab is used to tell the program the values on the axes of the 
-plot, since the program cannot detect them automatically. There are three 
-different ways to determine the axes, corresponding to the three radio 
+The 'Scale' tab is used to tell the program the values on the axes of the
+plot, since the program cannot detect them automatically. There are three
+different ways to determine the axes, corresponding to the three radio
 buttons in the 'Scale selection mode' panel.
 
 - Select axes:
 
-Press 'Select' and click first on the x-axis, then on the y-axis in the 
-image. Then write the x-coordinate of the first click and the y-coordinate 
-of the second click in the editable fields to the right. This mode can only 
-be used if both axes start at 0.
+Press 'Select' and click first on the x-axis, then on the y-axis in the
+image. Then write the x-coordinate of the first click and the
+y-coordinate of the second click in the editable fields to the right.
+This mode can only be used if both axes start at 0.
 
 - Select two points:
 
-Press the upper 'Select' button, click any point in the picture, and input 
-the x- and y-coordinates of the point. Then press the lower 'Select' button 
-and repeat the process. Note that the two points selected should be in 
-different x- and y-coordinates.
+Press the upper 'Select' button, click any point in the picture, and
+input the x- and y-coordinates of the point. Then press the lower
+'Select' button and repeat the process. Note that the two points selected
+should be in different x- and y-coordinates.
 
 - Select two points on each axis:
 
-Press the upper 'Select' button and click on any two points on the x-axis, 
-then input the x-coordinates of both points. Press the lower 'Select' 
-button and repeat the process for the y-axis.
+Press the upper 'Select' button and click on any two points on the
+x-axis, then input the x-coordinates of both points. Press the lower
+'Select' button and repeat the process for the y-axis.
 
 
 
 Edit data points:
 
-The data points hightlighted in the left image can be edited by hand. 
-Activate an editing mode by opening the 'Data' tab and clicking on the 
-'Delete data points', 'Overwrite data points' or 'Area deletion' buttons. 
-An editing mode may be cancelled by clicking on the corresponding button 
+The data points hightlighted in the left image can be edited by hand.
+Activate an editing mode by opening the 'Data' tab and clicking on the
+'Delete data points', 'Overwrite data points' or 'Area deletion' buttons.
+An editing mode may be cancelled by clicking on the corresponding button
 again, or switching to another editing mode by clicking another button.
 
-- Delete Data Points:
-Click on any data point in this mode to delete it. Note that you must 
-actually click on the pixel itself, the coloured border doesn't count.
+- Delete Data Points: Click on any data point in this mode to delete it.
+Note that you must actually click on the pixel itself, the coloured
+border doesn't count.
 
-- Override Data Points
-Click on any point in the image in this mode to create a new data point. If 
-a data point already exists within the same column in the image, it will be 
-overridden.
+- Override Data Points Click on any point in the image in this mode to
+create a new data point. If a data point already exists within the same
+column in the image, it will be overridden.
 
-- Area delete:
-Click on any point in the image in this mode to define one corner of a 
-rectangle. This point will not show in the picture, but the cursor will 
-change to indicate that the program has registered the click. Click on a 
-second point to delete all data points in the area of a rectangle defined 
-by the two clicks.
+- Area delete: Click on any point in the image in this mode to define one
+corner of a rectangle. This point will not show in the picture, but the
+cursor will change to indicate that the program has registered the click.
+Click on a second point to delete all data points in the area of a
+rectangle defined by the two clicks.
 
 
 
 Save data:
 
-Click on the 'Save to text file' button to save the data points to a text 
-file indicated in the 'File name' field in the 'Data' tab. If a file with 
-that name already exists, the old data will be overridden. If the file 
-doesn't exist, it will be created. The data will be saved in the format
-1    2
-2    4
-3    8
-and can be viewed as a plot by using the function checkdata('filename.txt') 
-on the MATLAB command line (replace 'filename' with the actual file name).
+Click on the 'Save to text file' button to save the data points to a text
+file indicated in the 'File name' field in the 'Data' tab. If a file with
+that name already exists, the old data will be overridden. If the file
+doesn't exist, it will be created. The data will be saved in the format 1
+2 2    4 3    8 and can be viewed as a plot by using the function
+checkdata('filename.txt') on the MATLAB command line (replace 'filename'
+with the actual file name).
 
-Alternatively, running the program as [x, y] = graphdigitizer() will return 
-the x and y-values of the data points as MATLAB row vectors.
+Alternatively, running the program as [x, y] = graphdigitizer() will
+return the x and y-values of the data points as MATLAB row vectors.

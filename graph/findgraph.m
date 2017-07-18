@@ -1,106 +1,91 @@
-function [x, y] = findgraph(I, startPoint, diffParam, colorParam)
+function [x, y] = findgraph(I, startPoint, parameters)
 
-xSize = size(I, 2);
-ySize = size(I, 1);
-x = 1:xSize;
+colorDiffPerc = parameters(1); %Color difference tolerance percentage
+shapeDiffPerc = parameters(2);
+graphColorPerc = parameters(3);
 
+colors = im2double(I); %Converts the image to a 3d array with values between 0 and 1
+
+[graphIndices, colorDifferences, shapeDifferences] = findindices(colors, graphColorPerc, startPoint); %Find the graph using a rough algorithm
+graphIndices = findmiddle(graphIndices, colorDifferences); %Find the middle of thick lines
+graphIndices = removedifferences(graphIndices, colorDifferences, shapeDifferences, colorDiffPerc, shapeDiffPerc); %Remove pixels with color or shape variation outside tolerance
+
+x = 1:size(I, 2);
+y = graphIndices;
+end
+
+
+function [graphIndices, colorDifferences, shapeDifferences] = findindices(colors, graphColorPerc, startPoint)
+
+[ySize, xSize, ~] = size(colors);
 startPointJ = startPoint(1);
 startPointI = startPoint(2);
+maxDiff = sqrt(3);  
+graphColor = (squeeze(colors(startPointI, startPointJ, :)))';
 
-graphColor = I(startPointI, startPointJ, :);
-graphColor = double(squeeze(graphColor))';
-
-%Finding pixels belonging to the graph
-[graphIndices, smallestDifferences] = findIndices();
-
-%Automatic removal of unnecessary pixels
-% avgDifference = mean(smallestDifferences);
-for jj = 1:xSize
-    if smallestDifferences(jj) > diffParam
-       graphIndices(jj) = NaN;
-    end
-end
-
-y = graphIndices;
-
-
-function [graphIndices, smallestDifferences] = findIndices()
-
-%Calculate color differences between graph and pixels
-colors = double(I);
-differences = zeros(ySize, xSize);
-
-for i = 1:ySize
-    for j = 1:xSize
-        color = [colors(i, j, 1), colors(i, j, 2), colors(i, j, 3)];
-        difference = norm(color - graphColor);
-        differences(i, j) = difference;
-    end
-end
-
+shapeDifferences = zeros(ySize, xSize);
+colorDifferences = zeros(ySize, xSize);
 graphIndices = zeros(1, xSize);
-smallestDifferences = 999 * ones(1, xSize);
-
-%Find i-indices of graph points using differences
-[indicesEnd, diffEnd] = indicesFromDifferences(startPointI, differences(:, startPointJ : xSize), colorParam);
-graphIndices(startPointJ : xSize) = indicesEnd;
-smallestDifferences(startPointJ : xSize) = diffEnd;
-
-[indicesStart, diffStart] = indicesFromDifferences(startPointI, differences(:, startPointJ: -1 : 1), colorParam);
-graphIndices(startPointJ : -1 : 1) = indicesStart;
-smallestDifferences(startPointJ : -1 : 1) = diffStart;
-
-end
-
-end
-
-function [graphIndices, smallestDifferences] = indicesFromDifferences(startI, differences, colorParam)
-
-ySize = size(differences, 1);
-xSize = size(differences, 2);
-maxDiff = sqrt(3);
-
-graphIndices = zeros(1, xSize);
-smallestDifferences = graphIndices;
-
 scores = zeros(ySize, xSize);
 
-%Find graph using a rough algorithm
-for j = 1:xSize
+prevI = startPointI;
+for j = startPointJ:xSize
+    newBestI = findbesti(j, prevI);
+    prevI(2) = prevI(1);
+    prevI(1) = newBestI;
+end
 
-    for i = 1:ySize
-        colorDiff = 100 * differences(i, j) / maxDiff;
-        
-        if j == 1
-            newI = startI;
-        elseif j == 2
-            newI = 2 * graphIndices(j - 1) - startI;
-        else
-            newI = 2 * graphIndices(j - 1) - graphIndices(j - 2);
-        end
-   
-        shapeDiff = 100 * abs(i - newI) / ySize;
-        scores(i, j) = colorParam * colorDiff + (1-colorParam) * shapeDiff;
-
-    end
-    
-    column = scores(:,j);
-    [~, sortedIndices] = sort(column);
-    bestI = sortedIndices(1);
-    graphIndices(j) = bestI;
-    smallestDifferences(j) = column(bestI);
+prevI = startPointI;
+for j = startPointJ:-1:1
+        newBestI = findbesti(j, prevI);
+    prevI(2) = prevI(1);
+    prevI(1) = newBestI;
 
 end
 
-%Find the middle of a thick line using a finer algorithm
-stopcondition = @(i, j) (differences(i, j) > maxDiff / 5);
+function bestI = findbesti(j, previousI)
+
+sz = size(previousI, 2);
+if sz == 1
+    newI = previousI(1);
+elseif sz == 2
+    newI = 2 * previousI(1) - previousI(2);
+end
+
+newI = min([ySize newI]); %Assure that newI is withing image borders
+newI = max([1 newI]);
+       
+for i = 1:ySize
+        color = [colors(i, j, 1), colors(i, j, 2), colors(i, j, 3)];
+        colorDiff = 100 * norm(color - graphColor) / maxDiff;
+        
+        shapeDiff = 100 * abs(i - newI) / ySize;
+
+        scores(i, j) = graphColorPerc / 100 * colorDiff + (1 - graphColorPerc / 100) * shapeDiff;
+        colorDifferences(i, j) = colorDiff;
+        shapeDifferences(i, j) = shapeDiff;
+end
+
+column = scores(:,j);
+[~, sortedIndices] = sort(column);
+bestI = sortedIndices(1);
+graphIndices(j) = bestI;
+end
+end
+
+
+function graphIndices = findmiddle(graphIndices, colorDifferences)
+
+[ySize, xSize] = size(colorDifferences);
+maxDiff = sqrt(3);
+stopcondition = @(i, j) (colorDifferences(i, j) >  20); %Make this an adjustable parameter?
 
 for j = 1:xSize
-    i0 = graphIndices(j);
-
-    list = [i0 differences(i0, j)];
+    i0 = graphIndices(j);    
+    list = i0;
     
-    for i = i0 + 1 : i0 + ySize / 20
+    for i = i0 + 1 : i0 + ySize / 20 %Make this an adjustable parameter?
+        
         if i < 1 || i > ySize
             continue
         end
@@ -109,7 +94,7 @@ for j = 1:xSize
             break
         end
         
-        list = cat(1, list, [i, differences(i, j)]);
+        list = cat(1, list, i);
     end
     
     for i = i0 - 1 : -1 : i0 - ySize / 20
@@ -121,18 +106,35 @@ for j = 1:xSize
             break
         end
         
-        list = cat(1, list, [i, differences(i, j)]);
+        list = cat(1, list, i);
     end
-    
+        
     %Weighted average of pixels in list:
     total = 0;
     colorsum = 0;
-    for i = 1:size(list, 1)
-        total = total + list(i, 1) * (maxDiff - list(i, 2));
-        colorsum = colorsum + (maxDiff - list(i, 2));
+    for i = 1:size(list)
+        total = total + list(i) * (maxDiff - list(i));
+        colorsum = colorsum + (maxDiff - list(i));
     end
     
     graphIndices(j) = round(total / colorsum);    
 end    
 
+end
+
+
+function graphIndices = removedifferences(graphIndices, colorDifferences, shapeDifferences, colorDiffPerc, shapeDiffPerc)
+xSize = size(graphIndices, 2);
+
+for jj = 1:xSize
+    if colorDifferences(graphIndices(jj), jj) > colorDiffPerc
+       graphIndices(jj) = NaN;
+       continue %No need to compare distDiff if value is already NaN
+    end
+    
+    if shapeDifferences(graphIndices(jj), jj) > shapeDiffPerc
+       graphIndices(jj) = NaN;
+    end
+end
+        
 end
