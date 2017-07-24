@@ -39,12 +39,7 @@ switch handles.mode
         handles = guidata(hObject);
         
     case 'delete points'
-        if handles.y_data(x) == y
-            handles.y_data(x) = NaN;
-        end
-        
-        guidata(hObject, handles)
-        refresh_preview(hObject, eventdata, handles);
+        deletepoints([x, y], hObject, eventdata, handles)
         handles = guidata(hObject);
         
     case 'area delete'
@@ -57,21 +52,14 @@ switch handles.mode
             handles.figure1.Pointer = 'cross';
                     
         else
-            x2 = x;
-            y2 = y;
-            
-            data = handles.y_data;
-            for i = 1:handles.x_size
-                if inarea([i, data(i)], [x1 y1 x2 y2])
-                    data(i) = NaN;
-                end     
-            end
-            handles.y_data = data;
             handles.clicks = 0;
             handles.figure1.Pointer = 'hand';
             
+            x2 = x;
+            y2 = y;
+            
             guidata(hObject, handles)
-            refresh_preview(hObject, eventdata, handles);
+            deletepoints([x1 y1 x2 y2], hObject, eventdata, handles)
             handles = guidata(hObject);
         end
         

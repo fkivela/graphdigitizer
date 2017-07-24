@@ -56,6 +56,7 @@ handles.savefile = handles.edit_save_file.String;
 
 handles.mode = 'none';
 handles.clicks = 0;
+handles.mouse_button_down = 0;
 
 handles.start_x = [];
 handles.start_y = [];
@@ -134,7 +135,47 @@ function figure1_WindowScrollWheelFcn(hObject, eventdata, handles)
 feval(handles.callbacks.scrollWheel, hObject, eventdata, handles);
 
 function figure1_WindowKeyPressFcn(hObject, eventdata, handles)
-feval(handles.callbacks.keyPress, hObject, eventdata, handles);
+feval(handles.callbacks.keyPress, hObject, eventdata, handles)
+
+
+
+
+function figure1_WindowButtonDownFcn(hObject, eventdata, handles)
+handles.mouse_button_down = 1;
+guidata(hObject, handles)
+
+
+function figure1_WindowButtonMotionFcn(hObject, eventdata, handles)
+
+if handles.mouse_button_down == 0
+    return
+end
+
+if ~strcmp(handles.mode, 'delete points')
+    return
+end
+
+coordinates = get(handles.axes_img,'CurrentPoint');
+coordinates = coordinates(1, 1:2);
+x = round(coordinates(1));
+y = round(coordinates(2));
+
+if inarea([x, y], [1,1,handles.x_size,handles.y_size])
+    deletepoints([x, y], hObject, eventdata, handles)
+    handles = guidata(hObject);
+end
+
+guidata(hObject, handles)
+
+
+function figure1_WindowButtonUpFcn(hObject, eventdata, handles)
+handles.mouse_button_down = 0;
+guidata(hObject, handles)
+
+
+
+
+
 
 %Buttons
 
