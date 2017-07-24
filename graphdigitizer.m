@@ -40,8 +40,21 @@ folder = fileparts(which(mfilename));
 addpath(genpath(folder));
 
 %Add callback function handles to handles.callbacks
-names = [fieldnames(imagenavigationcallbacks); fieldnames(editfieldcallbacks); fieldnames(buttoncallbacks); fieldnames(togglebuttoncallbacks)];
-callbacks = cell2struct([struct2cell(imagenavigationcallbacks); struct2cell(editfieldcallbacks); struct2cell(buttoncallbacks); struct2cell(togglebuttoncallbacks)], names, 1);
+names = [
+    fieldnames(imagenavigationcallbacks); ...
+    fieldnames(editfieldcallbacks); ...
+    fieldnames(buttoncallbacks); ...
+    fieldnames(togglebuttoncallbacks); ...
+    fieldnames(mousecallbacks)];
+
+callbacks = cell2struct([
+    struct2cell(imagenavigationcallbacks); ...
+    struct2cell(editfieldcallbacks); ...
+    struct2cell(buttoncallbacks); ...
+    struct2cell(togglebuttoncallbacks)
+    struct2cell(mousecallbacks)
+    ], names, 1);
+
 handles.callbacks = callbacks;
 
 %Initialize data
@@ -137,45 +150,14 @@ feval(handles.callbacks.scrollWheel, hObject, eventdata, handles);
 function figure1_WindowKeyPressFcn(hObject, eventdata, handles)
 feval(handles.callbacks.keyPress, hObject, eventdata, handles)
 
-
-
-
 function figure1_WindowButtonDownFcn(hObject, eventdata, handles)
-handles.mouse_button_down = 1;
-guidata(hObject, handles)
-
+feval(handles.callbacks.mousedown, hObject, eventdata, handles)
 
 function figure1_WindowButtonMotionFcn(hObject, eventdata, handles)
-
-if handles.mouse_button_down == 0
-    return
-end
-
-if ~strcmp(handles.mode, 'delete points')
-    return
-end
-
-coordinates = get(handles.axes_img,'CurrentPoint');
-coordinates = coordinates(1, 1:2);
-x = round(coordinates(1));
-y = round(coordinates(2));
-
-if inarea([x, y], [1,1,handles.x_size,handles.y_size])
-    deletepoints([x, y], hObject, eventdata, handles)
-    handles = guidata(hObject);
-end
-
-guidata(hObject, handles)
-
+feval(handles.callbacks.mousemove, hObject, eventdata, handles)
 
 function figure1_WindowButtonUpFcn(hObject, eventdata, handles)
-handles.mouse_button_down = 0;
-guidata(hObject, handles)
-
-
-
-
-
+feval(handles.callbacks.mouseup, hObject, eventdata, handles)
 
 %Buttons
 
@@ -211,6 +193,20 @@ feval(handles.callbacks.save, hObject, eventdata, handles)
 
 function button_help_Callback(hObject, eventdata, handles)
 feval(handles.callbacks.help, hObject, eventdata, handles)
+
+%Toggle buttons (tabs)
+
+function togglebutton_file_Callback(hObject, eventdata, handles)
+feval(handles.callbacks.filetab, hObject, eventdata, handles)
+
+function togglebutton_parameters_Callback(hObject, eventdata, handles)
+feval(handles.callbacks.parameterstab, hObject, eventdata, handles)
+
+function togglebutton_data_Callback(hObject, eventdata, handles)
+feval(handles.callbacks.datatab, hObject, eventdata, handles)
+
+function togglebutton_scale_Callback(hObject, eventdata, handles)
+feval(handles.callbacks.scaletab, hObject, eventdata, handles)
 
 %Edit fields
 
@@ -383,19 +379,3 @@ disp(handles)
 %#ok<*DEFNU> MATLAB doesn't find calls to GUIDE Callback functions even when they exist
 %#ok<*INUSL> Its easier to include arguments (hObject, eventdata, handles) in every 
 %function than to keep track of which functions need all of them and which only some
-
-
-function togglebutton_file_Callback(hObject, eventdata, handles)
-feval(handles.callbacks.filetab, hObject, eventdata, handles)
-
-function togglebutton_parameters_Callback(hObject, eventdata, handles)
-feval(handles.callbacks.parameterstab, hObject, eventdata, handles)
-
-
-function togglebutton_data_Callback(hObject, eventdata, handles)
-feval(handles.callbacks.datatab, hObject, eventdata, handles)
-
-
-function togglebutton_scale_Callback(hObject, eventdata, handles)
-feval(handles.callbacks.scaletab, hObject, eventdata, handles)
-
