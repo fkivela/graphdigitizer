@@ -58,6 +58,8 @@ callbacks = cell2struct([
 handles.callbacks = callbacks;
 
 %Initialize data
+handles.button_test.Visible = 'off';
+
 handles.img = [];
 handles.img_object = [];
 handles.x_size = 0;

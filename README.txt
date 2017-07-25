@@ -8,11 +8,10 @@ versions of this program. Also includes a list of known bugs.
 
  PRIORITY I
   - make sure new changes work with different screen sizes
-  - make 'test' button invisible when no longer needed
+  - update help.txt
 
  PRIORITY II
  - 'are you sure?' -question before refreshing the graph and overwriting all user-made changes
- - create algorithm to reduce static in the graph
  - improve the functionality of distance parameter
 
 PRIORITY III
