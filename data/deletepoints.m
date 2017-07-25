@@ -24,7 +24,6 @@ elseif size(points, 2) == 4
         end
         
         handles.y_data = data;
-        handles.test = handles.test + 1;
         guidata(hObject, handles)
     end
     
