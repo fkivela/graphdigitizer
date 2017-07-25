@@ -30,4 +30,4 @@ x = x * x_scale;
 y = y * y_scale;
 
 [x, y] = removeNaNs(x, y);
-y = smooth(x,y,2);
+y = smooth(x,y,handles.smoothing);

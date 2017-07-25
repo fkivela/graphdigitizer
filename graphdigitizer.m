@@ -11,7 +11,7 @@ function varargout = graphdigitizer(varargin)
 %
 % See also: DIGITIZE
 
-% Last Modified by GUIDE v2.5 17-Jul-2017 15:35:49
+% Last Modified by GUIDE v2.5 25-Jul-2017 14:59:31
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -41,18 +41,18 @@ addpath(genpath(folder));
 
 %Add callback function handles to handles.callbacks
 names = [
-    fieldnames(imagenavigationcallbacks); ...
+    fieldnames(slidercallbacks); ...
     fieldnames(editfieldcallbacks); ...
     fieldnames(buttoncallbacks); ...
     fieldnames(togglebuttoncallbacks); ...
-    fieldnames(mousecallbacks)];
+    fieldnames(figurecallbacks)];
 
 callbacks = cell2struct([
-    struct2cell(imagenavigationcallbacks); ...
+    struct2cell(slidercallbacks); ...
     struct2cell(editfieldcallbacks); ...
     struct2cell(buttoncallbacks); ...
     struct2cell(togglebuttoncallbacks)
-    struct2cell(mousecallbacks)
+    struct2cell(figurecallbacks)
     ], names, 1);
 
 handles.callbacks = callbacks;
@@ -81,6 +81,11 @@ handles.graphfinding_color_param = str2double(handles.edit_graphfinding1.String)
 handles.zoom_level = handles.slider_z.Value;
 handles.zoom_x = handles.slider_x.Value;
 handles.zoom_y = handles.slider_y.Value;
+
+value = handles.slider_smoothing.Value;
+handles.smoothing = value;
+handles.text_smoothing.String = sprintf('Smoothing: %.2f %%', value);
+
 
 handles.scale_indices = [NaN NaN NaN NaN]; %[j1 i1 j2 i2]
 handles.scale_values = [NaN NaN NaN NaN]; %[x1 y1 x2 y2]
@@ -118,7 +123,7 @@ else
      delete(hObject); %Closes the figure
 end
 
-%Image navigation
+%Sliders
 
 function slider_x_Callback(hObject, eventdata, handles)
 feval(handles.callbacks.sliderX, hObject, eventdata, handles);
@@ -143,6 +148,16 @@ function slider_z_CreateFcn(hObject, eventdata, handles)
 if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
+
+function slider_smoothing_Callback(hObject, eventdata, handles)
+feval(handles.callbacks.sliderSmooth, hObject, eventdata, handles);
+
+function slider_smoothing_CreateFcn(hObject, eventdata, handles)
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+%Figure Callbacks
 
 function figure1_WindowScrollWheelFcn(hObject, eventdata, handles)
 feval(handles.callbacks.scrollWheel, hObject, eventdata, handles);

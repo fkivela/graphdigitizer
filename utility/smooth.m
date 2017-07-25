@@ -21,8 +21,8 @@ sz = length(x);
 for i = 1:sz
     currentX = x(i);
     
-    upperLim = currentX+range/2;
-    lowerLim = currentX-range/2;
+    upperLim = currentX+range;
+    lowerLim = currentX-range;
     
     yInRange = y(lowerLim <= x & x <= upperLim);
     
