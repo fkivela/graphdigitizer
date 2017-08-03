@@ -62,15 +62,16 @@ classdef ImageClicker < handle
             if y < 1 || y > ySize
                 return
             end
-                        
+            obj.mode
             switch obj.mode
                 case 'selectStartPoint'
                     handles.GraphFinderController.startX = x;
                     handles.GraphFinderController.startY = y;
                     obj.mode = 'none';
                     
-                case 'delete points'
-                    fprintf('Delete point (%g,%g); functionality not yet supported\n', x, y);
+                case 'deletePoints'
+                    ('clicker delete')
+                    handles.Coordinator.deletePoint(x, y);
                     
                 case 'areaDelete'
                     

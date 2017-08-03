@@ -9,10 +9,11 @@ classdef Coordinator < handle
     
     methods
         
-        function obj = Coordinator(GFC, PIC, IC)
+        function obj = Coordinator(GFC, PIC, IC, D)
             obj.GraphFinderController = GFC;
             obj.PreviewImageController = PIC;
             obj.ImageClicker = IC;
+            obj.Data = D;
         end
         
         function findGraph(obj)
@@ -35,6 +36,12 @@ classdef Coordinator < handle
         
         function refresh(obj)
             obj.PreviewImageController.refreshPreview(obj.Data.yData);
+        end
+        
+        function deletePoint(obj, x, y)
+            disp('coordinator delete')
+           obj.Data.delete(x, y);
+           obj.refresh
         end
         
     end

@@ -65,7 +65,9 @@ handles.PreviewImageController = PreviewImageController(handles.axes_img, handle
 
 handles.ImageClicker = ImageClicker(handles.figure1);
 
-handles.Coordinator = Coordinator(handles.GraphFinderController, handles.PreviewImageController, handles.ImageClicker);
+handles.Data = Data();
+
+handles.Coordinator = Coordinator(handles.GraphFinderController, handles.PreviewImageController, handles.ImageClicker, handles.Data);
 
 %Initialize data
 handles.button_test.Visible = 'on';
