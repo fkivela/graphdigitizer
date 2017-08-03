@@ -57,8 +57,15 @@ callbacks = cell2struct([
 
 handles.callbacks = callbacks;
 
+handles.GraphFinder = GraphFinder();
+handles.GraphFinderController = GraphFinderController(handles.figure1, handles.GraphFinder);
+
+handles.PreviewImage = PreviewImage(handles.slider_z.Min, handles.slider_z.Max);
+handles.PreviewImageController = PreviewImageController(handles.axes_img, handles.PreviewImage);
+
+
 %Initialize data
-handles.button_test.Visible = 'off';
+handles.button_test.Visible = 'on';
 
 handles.img = [];
 handles.img_object = [];
@@ -384,7 +391,10 @@ end
 %Debugging
 
 function button_test_Callback(hObject, eventdata, handles)
-disp(handles)
+disp(handles.GraphFinder)
+disp(handles.GraphFinderController)
+
+
 
 %Arguments used in callback functions:
 % hObject    handle to active object (see GCBO)

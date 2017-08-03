@@ -24,12 +24,13 @@ if (isa(file,'double')) && (file == 0) %uigetfile returns 0 if browsing is inter
     return
 end
     
-guidata(hObject, handles)
-create_img(filename, hObject, eventdata, handles);
-handles = guidata(hObject);
-
-guidata(hObject, handles)
-refresh_img(hObject, eventdata, handles)
+% guidata(hObject, handles)
+% create_img(filename, hObject, eventdata, handles);
+% handles = guidata(hObject);
+% 
+% guidata(hObject, handles)
+% refresh_img(hObject, eventdata, handles)
+handles.PreviewImageController.loadImage(filename);
 end
 
 function button_start_select_Callback(hObject, eventdata, handles)

@@ -23,72 +23,35 @@ end
 
 function edit_filename_Callback(hObject, eventdata, handles)
 
-try
-    filename = hObject.String;
-    guidata(hObject, handles)
-    create_img(filename, hObject, eventdata, handles);
-    
-catch
-    handles.text_not_found.Visible = 'on';
-    guidata(hObject, handles);
-end
+% try
+%     filename = hObject.String;
+%     guidata(hObject, handles)
+%     create_img(filename, hObject, eventdata, handles);
+%     
+% catch
+%     handles.text_not_found.Visible = 'on';
+%     guidata(hObject, handles);
+% end
+filename = hObject.String;
+handles.PreviewImageController.loadImage(filename)
 end
 
 %Parameters
 
 function edit_color_diff_Callback(hObject, eventdata, handles)
-x = check_input(0, 100, 0, hObject);
-
-if isempty(x)
-    x = 0;
-    hObject.String = 0;
-end
-
-handles.color_diff_param = x;
-guidata(hObject, handles);
+handles.GraphFinderController.colorDiffParam = str2num(hObject.String);
 end
 
 function edit_distance_diff_Callback(hObject, eventdata, handles)
-
-x = check_input(0, 100, 0, hObject);
-
-if isempty(x)
-    x = 0;
-    hObject.String = 0;
-end
-
-handles.distance_diff_param = x;
-guidata(hObject, handles);
+handles.GraphFinderController.distanceDiffParam = str2num(hObject.String);
 end
 
 function edit_graphfinding1_Callback(hObject, eventdata, handles)
-
-x = check_input(0, 100, 0, hObject);
-
-if isempty(x)
-    x = 0;
-    hObject.String = 0;
-end
-
-handles.graphfinding_color_param = x;
-handles.edit_graphfinding2.String = 100 - x;
-guidata(hObject, handles);
-
+handles.GraphFinderController.graphColorParam = str2num(hObject.String);
 end
 
 function edit_graphfinding2_Callback(hObject, eventdata, handles)
-
-x = check_input(0, 100, 0, hObject);
-
-if isempty(x)
-    x = 0;
-    hObject.String = 0;
-end
-
-handles.graphfinding_color_param = 100 - x;
-handles.edit_graphfinding1.String = 100 - x;
-guidata(hObject, handles);
-
+handles.GraphFinderController.graphColorParam = 100 - str2num(hObject.String);
 end
 
 
