@@ -47,28 +47,28 @@ function figure1_WindowScrollWheelFcn(hObject, eventdata, handles)
 %	VerticalScrollCount: signed integer indicating direction and number of clicks
 %	VerticalScrollAmount: number of lines scrolled for each click
 
-zoom_lv = handles.zoom_level;
+zoomLv = handles.PreviewImageController.zoomLevel;
 dir = eventdata.VerticalScrollCount; %direction of scrolling (up or down), values +-1
-step = zoom_lv * 0.5; % Edit this to adjust the speed of zooming
+step = zoomLv * 0.5; % Edit this to adjust the speed of zooming
 
-new_zoom_lv = zoom_lv - dir * step;
+newZoomLv = zoomLv - dir * step;
 
 max = handles.slider_z.Max;
 min = handles.slider_z.Min;
 
-if new_zoom_lv > max
-    new_zoom_lv = max;
+if newZoomLv > max
+    newZoomLv = max;
 end
 
-if new_zoom_lv < min
-    new_zoom_lv = min;
+if newZoomLv < min
+    newZoomLv = min;
 end
 
-handles.zoom_level = new_zoom_lv;
-handles.slider_z.Value = new_zoom_lv;
-
-guidata(hObject, handles)
-refresh_img(hObject)
+handles.PreviewImageController.zoomLevel = newZoomLv;
+% handles.slider_z.Value = newZoomLv;
+% 
+% guidata(hObject, handles)
+% refresh_img(hObject)
 
 end
 
@@ -79,11 +79,62 @@ function figure1_WindowKeyPressFcn(hObject, eventdata, handles)
 %	Modifier: name(s) of the modifier key(s) (i.e., control, shift) pressed
 
 
+% key = eventdata.Key;
+% zoom_lv = handles.zoom_level;
+% x = handles.zoom_x;
+% y = handles.zoom_y;
+% step = 0.2 / zoom_lv; %Edit this to adjust the speed of movement
+% 
+% switch key
+%     case 'w'
+%         y = y + step;
+%     case 'a'
+%         x = x - step;
+%     case 's'
+%         y = y - step;
+%     case 'd'
+%         x = x + step;
+%     case 'uparrow'
+%         y = y + step;
+%     case 'leftarrow'
+%         x = x - step;
+%     case 'downarrow'
+%         y = y - step;
+%     case 'rightarrow'
+%         x = x + step;
+%     otherwise
+%         return
+% end
+% 
+% if x > 1
+%     x = 1;
+% end
+% 
+% if y > 1
+%     y = 1;
+% end
+% 
+% if x < 0
+%     x = 0;
+% end
+% 
+% if y < 0
+%     y = 0;
+% end
+% 
+% handles.zoom_x = x;
+% handles.zoom_y = y;
+% handles.slider_x.Value = x;
+% handles.slider_y.Value = y;
+% 
+% guidata(hObject, handles)
+% refresh_img(hObject)
+
 key = eventdata.Key;
-zoom_lv = handles.zoom_level;
-x = handles.zoom_x;
-y = handles.zoom_y;
-step = 0.2 / zoom_lv; %Edit this to adjust the speed of movement
+zoomLv = handles.PreviewImageController.zoomLevel;
+x = handles.PreviewImageController.xPosition;
+y = handles.PreviewImageController.yPosition;
+step = 0.2 / zoomLv; %Edit this to adjust the speed of movement
 
 switch key
     case 'w'
@@ -106,28 +157,11 @@ switch key
         return
 end
 
-if x > 1
-    x = 1;
-end
+between01 = @(x) min([1 max([0 x])]);
+x = between01(x);
+y = between01(y);
 
-if y > 1
-    y = 1;
-end
-
-if x < 0
-    x = 0;
-end
-
-if y < 0
-    y = 0;
-end
-
-handles.zoom_x = x;
-handles.zoom_y = y;
-handles.slider_x.Value = x;
-handles.slider_y.Value = y;
-
-guidata(hObject, handles)
-refresh_img(hObject)
+handles.PreviewImageController.xPosition = x;
+handles.PreviewImageController.yPosition = y;
 
 end

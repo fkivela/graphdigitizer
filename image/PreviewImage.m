@@ -4,9 +4,10 @@ classdef PreviewImage < handle
         xPosition
         yPosition
         zoomLevel
-        minZoom;
-        maxZoom;
+        minZoom
+        maxZoom
         imageMatrix
+        originalImageMatrix
     end
     
     properties(Dependent)
@@ -44,7 +45,7 @@ classdef PreviewImage < handle
             ysz = size(obj.imageMatrix, 1);
         end
         
-        function img = loadImage(obj, filename)
+        function loadImage(obj, filename)
             
             [img, map] = imread(filename);
             
@@ -53,11 +54,29 @@ classdef PreviewImage < handle
                 img = ind2rgb(img, map);
             end
             
-            obj.imageMatrix = img;            
+            obj.originalImageMatrix = img;
+            obj.imageMatrix = img;
+        end
+        
+        function refreshPreview(obj, yData)
+%             handles = guidata(hObject);
+
+            % if isempty(img) || isempty(handles.y_data)
+            %     return
+            % end
+
+            obj.imageMatrix = generatePreview(obj.originalImageMatrix, yData);
+%             handles.img_object.CData = preview;
+
+%             [x_out, y_out] = output_data(hObject, eventdata, handles);
+%             handles.plot_object.XData = x_out;
+%             handles.plot_object.YData = y_out;
+
+            
         end
         
         function borders = zoomedImage(obj)
-                        
+            
             if isempty(obj.imageMatrix)
                 borders = [];
                 return

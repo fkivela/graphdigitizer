@@ -7,13 +7,15 @@ classdef PreviewImageController < handle
     end
     
     properties(Dependent)
+        imageMatrix
+        originalImageMatrix
         xPosition
         yPosition
         zoomLevel
-        imageMatrix
         xSize
         ySize
     end
+
     
     methods
         
@@ -53,19 +55,48 @@ classdef PreviewImageController < handle
             %guidata(obj.axes, handles)
             obj.refreshImage
         end
+        
+        function x = get.xPosition(obj)
+            x = obj.PreviewImage.xPosition;
+        end
+        
+        function y = get.yPosition(obj)
+            y = obj.PreviewImage.yPosition;
+        end
+        
+        function z = get.zoomLevel(obj)
+            z = obj.PreviewImage.zoomLevel;
+        end
+        
+        function x = get.xSize(obj)
+            x = obj.PreviewImage.xSize;
+        end
+        
+        function y = get.ySize(obj)
+            y = obj.PreviewImage.ySize;
+        end
+        
+        function img = get.imageMatrix(obj)
+           img = obj.PreviewImage.imageMatrix; 
+        end
+        
+        function img = get.originalImageMatrix(obj)
+           img = obj.PreviewImage.originalImageMatrix; 
+        end
+
                 
         function loadImage(obj, filename)
             
             handles = guidata(obj.axes);
             
             try
-                img = obj.PreviewImage.loadImage(filename);
+                obj.PreviewImage.loadImage(filename);
             catch
                 handles.text_not_found.Visible = 'on';
                 return
             end
                         
-            obj.imageObject = image(obj.axes, img,'ButtonDownFcn',{@img_click_Callback});
+            obj.imageObject = image(obj.axes, obj.originalImageMatrix,'ButtonDownFcn',{@img_click_Callback});
             
             handles.text_not_found.Visible = 'off';
             handles.edit_filename.String = filename;
@@ -77,8 +108,14 @@ classdef PreviewImageController < handle
             
         end
         
-        function refreshImage(obj)
-                        
+        function refreshPreview(obj, yData)
+            obj.PreviewImage.refreshPreview(yData);
+            obj.imageObject.CData = obj.imageMatrix;
+            obj.refreshImage;
+        end
+        
+        function refreshImage(obj, yData)
+
             borders = obj.PreviewImage.zoomedImage;
             
             if isempty(borders)
@@ -94,7 +131,7 @@ classdef PreviewImageController < handle
             obj.axes.YLim = [yStart yEnd];
             
         end
-        
+                
     end
     
 end

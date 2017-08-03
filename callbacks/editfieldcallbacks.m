@@ -33,7 +33,7 @@ function edit_filename_Callback(hObject, eventdata, handles)
 %     guidata(hObject, handles);
 % end
 filename = hObject.String;
-handles.PreviewImageController.loadImage(filename)
+handles.Coordinator.newImage(filename)
 end
 
 %Parameters

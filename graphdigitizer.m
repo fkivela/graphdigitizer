@@ -9,7 +9,7 @@ function varargout = graphdigitizer(varargin)
 %
 %      For instructions in using the program, open the GUI and click on the 'help' button 
 %
-% See also: DIGITIZE
+% See also: DIGITIZErasolaras
 
 % Last Modified by GUIDE v2.5 25-Jul-2017 14:59:31
 
@@ -63,6 +63,9 @@ handles.GraphFinderController = GraphFinderController(handles.figure1, handles.G
 handles.PreviewImage = PreviewImage(handles.slider_z.Min, handles.slider_z.Max);
 handles.PreviewImageController = PreviewImageController(handles.axes_img, handles.PreviewImage);
 
+handles.ImageClicker = ImageClicker(handles.figure1);
+
+handles.Coordinator = Coordinator(handles.GraphFinderController, handles.PreviewImageController, handles.ImageClicker);
 
 %Initialize data
 handles.button_test.Visible = 'on';

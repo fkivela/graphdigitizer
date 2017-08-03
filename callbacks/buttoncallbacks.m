@@ -30,20 +30,27 @@ end
 % 
 % guidata(hObject, handles)
 % refresh_img(hObject, eventdata, handles)
-handles.PreviewImageController.loadImage(filename);
+handles.Coordinator.newImage(filename);
 end
 
 function button_start_select_Callback(hObject, eventdata, handles)
 
-guidata(hObject, handles)
-if strcmp(handles.mode, 'select start point')
-    set_mode('none', hObject, eventdata, handles)
-else
-    set_mode('select start point', hObject, eventdata, handles)
-end
-handles = guidata(hObject);
+% guidata(hObject, handles)
+% if strcmp(handles.mode, 'select start point')
+%     set_mode('none', hObject, eventdata, handles)
+% else
+%     set_mode('select start point', hObject, eventdata, handles)
+% end
+% handles = guidata(hObject);
+% 
+% guidata(hObject, handles);
+disp('Pressed "Start select"')
 
-guidata(hObject, handles);
+    if handles.ImageClicker.modeIs('selectStartPoint')
+        handles.ImageClicker.mode = 'none';
+    else
+        handles.ImageClicker.mode = 'selectStartPoint';
+    end
 end
 
 function button_delete_points_Callback(hObject, eventdata, handles)
@@ -86,36 +93,37 @@ end
 
 function button_find_graph_Callback(hObject, eventdata, handles)
 
-parameters(1) = handles.color_diff_param;
-parameters(2) = handles.distance_diff_param;
-parameters(3) = handles.graphfinding_color_param;
-
-start_x = handles.start_x;
-start_y = handles.start_y;
-start = [start_x, start_y];
-img = handles.img;
-
-if isempty(img)
-    error_msg('The graph cannot be computed before an image is selected', hObject);
-    return
-end
-
-if isempty(start_x) || isempty(start_y)
-    error_msg('The graph cannot be computed before a starting point is selected', hObject);
-    return
-end
-
-handles = guidata(hObject);
-
-[x, y] = findgraph(img, start, parameters);
-handles.y_data = y;
-handles.plot_object = plot(handles.axes_plot, x, y);
-
-guidata(hObject, handles)
-refresh_preview(hObject, eventdata, handles)
-handles = guidata(hObject);
-
-guidata(hObject, handles);
+handles.Coordinator.findGraph
+% parameters(1) = handles.color_diff_param;
+% parameters(2) = handles.distance_diff_param;
+% parameters(3) = handles.graphfinding_color_param;
+% 
+% start_x = handles.start_x;
+% start_y = handles.start_y;
+% start = [start_x, start_y];
+% img = handles.img;
+% 
+% if isempty(img)
+%     error_msg('The graph cannot be computed before an image is selected', hObject);
+%     return
+% end
+% 
+% if isempty(start_x) || isempty(start_y)
+%     error_msg('The graph cannot be computed before a starting point is selected', hObject);
+%     return
+% end
+% 
+% handles = guidata(hObject);
+% 
+% [x, y] = findgraph(img, start, parameters);
+% handles.y_data = y;
+% handles.plot_object = plot(handles.axes_plot, x, y);
+% 
+% guidata(hObject, handles)
+% refresh_preview(hObject, eventdata, handles)
+% handles = guidata(hObject);
+% 
+% guidata(hObject, handles);
 end
 
 function button_index1_Callback(hObject, eventdata, handles)

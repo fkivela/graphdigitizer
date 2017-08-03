@@ -8,6 +8,7 @@ classdef GraphFinderController < handle
     properties(Dependent)
         startX
         startY
+        image
         graphColorParam
         colorDiffParam
         distanceDiffParam
@@ -25,6 +26,10 @@ classdef GraphFinderController < handle
            obj.graphColorParam = str2num(handles.edit_graphfinding1.String);
            obj.colorDiffParam = str2num(handles.edit_color_diff.String);
            obj.distanceDiffParam = str2num(handles.edit_distance_diff.String);
+        end
+        
+        function set.image(obj, img)
+           obj.GraphFinder.newImage(img); 
         end
 
         function set.startX(obj, value)
@@ -67,7 +72,22 @@ classdef GraphFinderController < handle
             handles = guidata(obj.figure);
             handles.edit_distance_diff.String = value;
             guidata(obj.figure, handles)
-        end        
+        end
+        
+        function [x, y] = findGraph(obj)
+            x = obj.GraphFinder.xData;
+            y = obj.GraphFinder.yData;
+            
+            if isempty(x) || isempty(y)
+                x = [];
+                y = [];
+                disp('Insert error msg here')
+                return
+            end
+
+        end
+        
+        
         
     end
     
