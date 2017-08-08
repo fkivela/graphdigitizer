@@ -45,11 +45,12 @@ function button_start_select_Callback(hObject, eventdata, handles)
 % 
 % guidata(hObject, handles);
 
-    if handles.ImageClicker.modeIs('selectStartPoint')
-        handles.ImageClicker.mode = 'none';
-    else
-        handles.ImageClicker.mode = 'selectStartPoint';
-    end
+if handles.ImageClicker.modeIs('selectStartPoint')
+    handles.ImageClicker.mode = 'none';
+else
+    handles.ImageClicker.mode = 'selectStartPoint';
+end
+
 end
 
 function button_delete_points_Callback(hObject, eventdata, handles)
@@ -72,27 +73,42 @@ end
 
 function button_area_Callback(hObject, eventdata, handles)
 
-guidata(hObject, handles)
-if strcmp(handles.mode, 'area delete')
-    set_mode('none', hObject, eventdata, handles)
-else
-    set_mode('area delete', hObject, eventdata, handles)
-end
-handles = guidata(hObject);
+% guidata(hObject, handles)
+% if strcmp(handles.mode, 'area delete')
+%     set_mode('none', hObject, eventdata, handles)
+% else
+%     set_mode('area delete', hObject, eventdata, handles)
+% end
+% handles = guidata(hObject);
+% 
+% guidata(hObject, handles);
 
-guidata(hObject, handles);
+if handles.ImageClicker.modeIs('areaDelete')
+    handles.ImageClicker.mode = 'none';
+else
+    handles.ImageClicker.mode = 'areaDelete';
+end
+
 end
 
 function button_overwrite_points_Callback(hObject, eventdata, handles)
-guidata(hObject, handles)
-if strcmp(handles.mode, 'overwrite points')
-    set_mode('none', hObject, eventdata, handles)
-else
-    set_mode('overwrite points', hObject, eventdata, handles)
-end
-handles = guidata(hObject);
+% guidata(hObject, handles)
+% if strcmp(handles.mode, 'overwrite points')
+%     set_mode('none', hObject, eventdata, handles)
+% else
+%     set_mode('overwrite points', hObject, eventdata, handles)
+% end
+% handles = guidata(hObject);
+% 
+% guidata(hObject, handles);
 
-guidata(hObject, handles);
+if handles.ImageClicker.modeIs('overwritePoints')
+    handles.ImageClicker.mode = 'none';
+else
+    handles.ImageClicker.mode = 'overwritePoints';
+end
+
+
 end
 
 function button_find_graph_Callback(hObject, eventdata, handles)

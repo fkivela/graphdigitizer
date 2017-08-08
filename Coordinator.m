@@ -39,9 +39,34 @@ classdef Coordinator < handle
         end
         
         function deletePoint(obj, x, y)
-            disp('coordinator delete')
            obj.Data.delete(x, y);
            obj.refresh
+        end
+        
+        function areaDelete(obj, borders)
+           obj.Data.areaDelete(borders);
+           obj.refresh
+        end
+        
+        function overwritePoint(obj, x, y)
+           obj.Data.overwrite(x, y);
+           obj.refresh
+        end
+        
+        function editData(obj, x, y, mode)
+            d = obj.Data;
+            
+            switch mode
+               
+                case 'deletePoints'
+                    d.delete(x, y);
+                case 'areaDelete'
+                    d.areaDelete([x(1) y(2) x(2) y(2)]);
+                case 'overwritePoints'
+                    d.overwritePoints(x, y);
+            end
+            
+            obj.refresh()
         end
         
     end
