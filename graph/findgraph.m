@@ -112,7 +112,7 @@ for j = 1:xSize
     %Weighted average of pixels in list:
     total = 0;
     colorsum = 0;
-    for i = 1:size(list)
+    for i = 1:length(list)
         total = total + list(i) * (maxDiff - list(i));
         colorsum = colorsum + (maxDiff - list(i));
     end
